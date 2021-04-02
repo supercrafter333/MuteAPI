@@ -1,0 +1,10 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/supercrafter333/MuteAPI
+build-by-default: true
+branches:
+- master
+projects:
+  MuteAPI:
+    path: ""
+    model: virion
+    type: library
+...
