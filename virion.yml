@@ -1,0 +1,6 @@
+name: MuteAPI
+version: 1.0.0
+antigen: supercrafter333\MuteAPI
+api: 3.0.0
+authors: [supercrafter333]
+description: A simple API to mute players
