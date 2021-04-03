@@ -47,11 +47,28 @@ class PlayerDataMgr
         return false;
     }
 
+    public function unMute(): bool
+    {
+        if ($this->getMuteList()->exists($this->name)) {
+            $this->getMuteList()->remove($this->name);
+            return true;
+        }
+        return false;
+    }
+
     public function isTimeMuted(): bool
     {
         if ($this->isMuted()) {
             if ($this->getMuteList()->exists($this->name)["date"]) {
-                return true;
+                $now = new DateTime('now');
+                $cfgDate = $this->getMuteList()->get($this->name)["date"];
+                $date = new DateTime($cfgDate);
+                if ($now >= $date) {
+                    $this->unMute();
+                    return false;
+                } else {
+                    return true;
+                }
             }
         }
         return false;
@@ -108,6 +125,8 @@ class PlayerDataMgr
                 $this->getMuteList()->set($this->name, $setThis);
                 $this->getMuteList()->save();
             }
+        } else {
+            $this->unMute();
         }
     }
 }
