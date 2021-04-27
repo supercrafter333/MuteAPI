@@ -39,7 +39,7 @@ class TestPlugin extends PluginBase
                 $reason = $args[1];
                 $time = $args[2];
                 $muteApi = new MuteAPI($this);
-                $muteMgr = $muteApi->getMuteMgr("§cYou're Muted! You can't send a message, when you're muted!")
+                $muteMgr = $muteApi->getMuteMgr("§cYou're Muted! You can't send a message, when you're muted!");
                 $playerData = $muteMgr->getPlayerData($player);
                 if (!$time instanceof \DateInterval) {
                     $sender->sendMessage("§cPlease use the §7DateInterval§c format!");
