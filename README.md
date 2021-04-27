@@ -83,7 +83,7 @@ class TestPlugin extends PluginBase
                 }
                 $reason = $args[1];
                 $muteApi = new MuteAPI($this);
-                $muteMgr = $muteApi->getMuteMgr("§cYou're Muted! You can't send a message, when you're muted!")
+                $muteMgr = $muteApi->getMuteMgr("§cYou're Muted! You can't send a message, when you're muted!");
                 $playerData = $muteMgr->getPlayerData($player);
                 $playerData->setMuted(true, $reason);
                 $sender->sendMessage("§aYou've successfully muted the player §7" . $player->getName() . "§a!");
@@ -99,7 +99,7 @@ public function onChat(\pocketmine\event\player\PlayerChatEvent $event)
 {
     $player = $event->getPlayer();
     $muteApi = new MuteAPI($this);
-    $muteMgr = $muteApi->getMuteMgr("§cYou're Muted! You can't send a message, when you're muted!")
+    $muteMgr = $muteApi->getMuteMgr("§cYou're Muted! You can't send a message, when you're muted!");
     $playerData = $muteMgr->getPlayerData($player);
     if ($playerData->isMuted()) {
         $player->sendMessage($muteMgr->getMuteMessage());
