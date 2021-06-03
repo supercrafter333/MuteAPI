@@ -1,4 +1,4 @@
-# MuteAPI - V1.0.0
+# MuteAPI - V1.0.1
 **A simple API to mute players!**
 
 ---------------------------------

@@ -6,15 +6,32 @@ use DateTime;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\utils\Config;
-use supercrafter333\MuteAPI\MuteAPI;
 
+/**
+ * Class PlayerDataMgr
+ * @package supercrafter333\MuteAPI\Managers
+ */
 class PlayerDataMgr
 {
 
+    /**
+     * @var Player
+     */
     protected $player;
+    /**
+     * @var string
+     */
     protected $name;
+    /**
+     * @var Plugin
+     */
     protected $plugin;
 
+    /**
+     * PlayerDataMgr constructor.
+     * @param Player $player
+     * @param Plugin $plugin
+     */
     public function __construct(Player $player, Plugin $plugin)
     {
         $this->plugin = $plugin;
@@ -22,22 +39,45 @@ class PlayerDataMgr
         $this->name = $player->getName();
     }
 
+    /**
+     * @return Config
+     */
     protected function getMuteList(): Config
     {
         $cfg = new Config($this->plugin->getDataFolder() . "mutelist.yml", Config::YAML);
         return $cfg;
     }
 
+    /**
+     * @return Player
+     */
     public function getPlayer(): Player
     {
         return $this->player;
     }
 
+    /**
+     * @return string
+     */
     public function getPlayerName(): string
     {
         return $this->name;
     }
 
+    /**
+     * Refresh the MuteList. This function will save and reload the list.
+     */
+    public function refreshList()
+    {
+        $this->getMuteList()->save();
+        $this->getMuteList()->reload();
+    }
+
+    /**
+     * Check if a player is muted.
+     *
+     * @return bool
+     */
     public function isMuted(): bool
     {
         $name = $this->name;
@@ -47,6 +87,11 @@ class PlayerDataMgr
         return false;
     }
 
+    /**
+     * Un mute a player.
+     *
+     * @return bool
+     */
     public function unMute(): bool
     {
         if ($this->getMuteList()->exists($this->name)) {
@@ -56,6 +101,12 @@ class PlayerDataMgr
         return false;
     }
 
+    /**
+     * Check if a player is muted for some time.
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function isTimeMuted(): bool
     {
         if ($this->isMuted()) {
@@ -74,25 +125,37 @@ class PlayerDataMgr
         return false;
     }
 
+    /**
+     * Set a player un-/muted
+     *
+     * @param bool $muted
+     * @param string $reason
+     */
     public function setMuted(bool $muted = true, $reason = "")
     {
         $name = $this->name;
         if ($muted == true) {
             if ($reason !== "") {
                 $this->getMuteList()->set($name, ["muted" => true, "reason" => $reason]);
-                $this->getMuteList()->save();
+                $this->refreshList();
             } else {
                 $this->getMuteList()->set($name, ["muted" => true]);
-                $this->getMuteList()->save();
+                $this->refreshList();
             }
         } else {
             if ($this->isMuted()) {
                 $this->getMuteList()->remove($name);
-                $this->getMuteList()->save();
+                $this->refreshList();
             }
         }
     }
 
+    /**
+     * Get the date of the mute.
+     *
+     * @return DateTime|false
+     * @throws \Exception
+     */
     public function getMuteDate()
     {
         if ($this->isTimeMuted()) {
@@ -101,6 +164,11 @@ class PlayerDataMgr
         return false;
     }
 
+    /**
+     * Get the reason of the mute.
+     *
+     * @return false|mixed
+     */
     public function getMuteReason()
     {
         if ($this->isMuted() && $this->getMuteList()->exists($this->name)["reason"]) {
@@ -109,6 +177,14 @@ class PlayerDataMgr
         return false;
     }
 
+    /**
+     * Set a player time un-/muted
+     *
+     * @param bool $muted
+     * @param string $reason
+     * @param \DateInterval $muteDate
+     * @throws \Exception
+     */
     public function setTimeMuted(bool $muted, string $reason, \DateInterval $muteDate)
     {
         if ($muted == true) {
@@ -119,11 +195,11 @@ class PlayerDataMgr
                 $newDate = $dateBefore->add($muteDate);
                 $setThis = ["muted" => true, "reason" => $reason, "date" => $newDate->format("Y.m.d H:i:s")];
                 $this->getMuteList()->set($this->name, $setThis);
-                $this->getMuteList()->save();
+                $this->refreshList();
             } else {
                 $setThis = ["muted" => true, "reason" => $reason, "date" => $date->format("Y.m.d H:i:s")];
                 $this->getMuteList()->set($this->name, $setThis);
-                $this->getMuteList()->save();
+                $this->refreshList();
             }
         } else {
             $this->unMute();
