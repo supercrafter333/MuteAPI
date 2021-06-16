@@ -15,6 +15,11 @@ class PlayerDataMgr
 {
 
     /**
+     * @var bool|string
+     */
+    protected static $customPath;
+
+    /**
      * @var Player
      */
     protected $player;
@@ -32,10 +37,11 @@ class PlayerDataMgr
      * @param Player $player
      * @param Plugin $plugin
      */
-    public function __construct(Player $player, Plugin $plugin)
+    public function __construct(Player $player, Plugin $plugin, string $customPath = "")
     {
         $this->plugin = $plugin;
         $this->player = $player;
+        self::$customPath = $customPath == " " ?? $plugin->getDataFolder();
         $this->name = $player->getName();
     }
 
@@ -44,7 +50,7 @@ class PlayerDataMgr
      */
     protected function getMuteList(): Config
     {
-        $cfg = new Config($this->plugin->getDataFolder() . "mutelist.yml", Config::YAML);
+        $cfg = new Config(self::$customPath . "mutelist.yml", Config::YAML);
         return $cfg;
     }
 

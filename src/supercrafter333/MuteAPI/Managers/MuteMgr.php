@@ -16,6 +16,12 @@ class MuteMgr
      * @var string
      */
     public static $muteMessage;
+
+    /**
+     * @var bool|string
+     */
+    public static $customPath;
+
     /**
      * @var Plugin
      */
@@ -26,10 +32,11 @@ class MuteMgr
      * @param Plugin $plugin
      * @param string $muteMessage
      */
-    public function __construct(Plugin $plugin, string $muteMessage = "§cYou're Muted!")
+    public function __construct(Plugin $plugin, string $muteMessage = "§cYou're Muted!", string $customPath = "")
     {
         $this->plugin = $plugin;
         self::$muteMessage = $muteMessage;
+        self::$customPath = $customPath == " " ?? $plugin->getDataFolder();
     }
 
     /**
@@ -38,7 +45,7 @@ class MuteMgr
      */
     public function getPlayerData(Player $player)
     {
-        return new PlayerDataMgr($player, $this->plugin);
+        return new PlayerDataMgr($player, $this->plugin, self::$customPath);
     }
 
     /**

@@ -1,4 +1,4 @@
-# MuteAPI - V1.0.1
+# MuteAPI - V1.1.0
 **A simple API to mute players!**
 
 ---------------------------------
@@ -39,7 +39,8 @@ class TestPlugin extends PluginBase
                 $reason = $args[1];
                 $time = $args[2];
                 $muteApi = new MuteAPI($this);
-                $muteMgr = $muteApi->getMuteMgr("§cYou're Muted! You can't send a message, when you're muted!");
+                $customPath = "/home/db/MuteAPI/"; //OPTIONAL!!
+                $muteMgr = $muteApi->getMuteMgr("§cYou're Muted! You can't send a message, when you're muted!", $customPath);
                 $playerData = $muteMgr->getPlayerData($player);
                 if (!$time instanceof \DateInterval) {
                     $sender->sendMessage("§cPlease use the §7DateInterval§c format!");

@@ -39,8 +39,8 @@ class MuteAPI
      * @param string $muteMessage
      * @return MuteMgr
      */
-    public function getMuteMgr(string $muteMessage = "§cYou're Muted!"): MuteMgr
+    public function getMuteMgr(string $muteMessage = "§cYou're Muted!", string $customPath = ""): MuteMgr
     {
-        return new MuteMgr($muteMessage, $this->getPlugin());
+        return new MuteMgr($this->getPlugin(), $muteMessage, $customPath);
     }
 }
